@@ -85,6 +85,7 @@ func run(self *Task, f func() error) {
 			}
 			if err := f(); err != nil {
 				timer.Stop()
+				self.Status = Stop
 				return
 			}
 		case status, ok := <-getmaps(self.Name).Chan:
@@ -96,6 +97,7 @@ func run(self *Task, f func() error) {
 			switch status {
 			case Stop:
 				timer.Stop()
+				self.Status = Stop
 				return
 			case Running:
 				self.Status = Running
