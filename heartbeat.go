@@ -67,6 +67,7 @@ type Task struct {
 	Status     string
 	Spec       int
 	Chan       chan string
+	Err        error
 	m          sync.Mutex
 	CreateTime time.Time
 }
@@ -84,6 +85,7 @@ func run(self *Task, f func() error) {
 				continue
 			}
 			if err := f(); err != nil {
+				self.Err = err
 				timer.Stop()
 				self.Status = Stop
 				return
